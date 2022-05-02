@@ -1,0 +1,122 @@
+version: '3.7'
+
+services:
+  #WEB
+  web: &web
+    image: django_web
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/my_app
+    ports:
+      - 8000:8000
+    environment:
+      - DEBUG=1
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - db
+      - rabbitmq
+      - celery
+      - celery-beat
+
+  #DATABASE
+  db:
+    image: postgres:12.0-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - 5432:5432
+
+  #RABBITMQ
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    restart: always
+    ports:
+        - 5672:5672
+        - 15672:15672
+
+  #CELERY
+  celery:
+    <<: *web
+    command: celery -A movie_auth worker -l info
+    ports: []
+    environment:
+      - DEBUG=1
+    depends_on:
+      - db
+      - rabbitmq
+  celery-beat:
+    <<: *web
+    command: celery -A movie_auth beat -l info
+    environment:
+      - DEBUG=1
+    ports: []
+    depends_on:
+      - db
+      - rabbitmq
+
+  #FLOVER
+  flower:
+    <<: *web
+    command: celery -A movie_auth flower --broker=amqp://guest:guest@rabbitmq:5672// --port=5566
+    environment:
+      - DEBUG=1
+    ports:
+      - 5566:5566
+    depends_on:
+      - db
+      - rabbitmq
+      - celery
+      - celery-beat
+
+    #PGADMIN
+    pgadmin:
+      image: dpage/pgadmin4
+      depends_on:
+        - db
+      ports:
+        - 5050:80
+      environment:
+        PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
+        PGADMIN_DEFAULT_PASSWORD: adminka
+      restart: always
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

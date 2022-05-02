@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'movie_auth/static/register.css' %}">
+    <title>Profile</title>
+</head>
+<body>
+  <h1>Authorization was successful</h1>
+  <br>
+  <form action="{% url 'register:logout' %}" method="post">
+      {% csrf_token %}
+      <button type="submit" value="Logout">
+          Logout
+      </button>
+  </form>
+</body>
+</html>

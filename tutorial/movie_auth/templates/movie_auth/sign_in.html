@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'core/css/main.css' %}">
+    <title>Sign In</title>
+</head>
+<body>
+    <form
+        method="post"
+        action="{{ sign_in_url }}">
+       {% csrf_token %}
+        <input name="username" type="text" />
+        <input name="email" type="email" />
+        <input name="password" type="password" />
+        <button
+            class="btn btn-primary">
+            <h1>Sign In</h1>
+        </button>
+    </form>
+
+</body>
+</html>

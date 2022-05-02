@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'core/css/main.css' %}">
+    <title>Sign up</title>
+</head>
+<body>
+    <form
+        method="post"
+        action="{{ sign_up_url }}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button
+            class="btn btn-primary">
+            <h1>Sign Up</h1>
+        </button>
+</body>
+</html>

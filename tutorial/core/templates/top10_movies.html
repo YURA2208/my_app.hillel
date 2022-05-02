@@ -1,0 +1,15 @@
+{%extends 'core/base.html'%}
+
+{% block title %}
+{{title}}
+{%endblock%}
+
+{% block content %}
+
+<ul>{% for el in movies %}
+        <a href="{% url 'about_movie' el.pk %}">
+            <li>{{ el }}</li>
+        </a>
+
+    {% endfor %}</ul>
+{%endblock%}
